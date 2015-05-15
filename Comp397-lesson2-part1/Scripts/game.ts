@@ -1,16 +1,28 @@
-﻿/// <reference path="typings/tweenjs/tweenjs.d.ts" />
-/// <reference path="typings/easeljs/easeljs.d.ts" />
+﻿/// <reference path="typings/easeljs/easeljs.d.ts" />
+/// <reference path="typings/tweenjs/tweenjs.d.ts" />
 /// <reference path="typings/soundjs/soundjs.d.ts" />
 /// <reference path="typings/preloadjs/preloadjs.d.ts" />
+
 //Game framework variable
 
 var canvas = document.getElementById("canvas");
 var stage: createjs.Stage;
-
+var assets: createjs.LoadQueue;
 
 //Game variables
 var helloLabel: createjs.Text;  //create a refrence
+var pinkButton: createjs.Bitmap;
 
+function preload()
+{
+    assets = new createjs.LoadQueue();
+    assets.installPlugin(createjs.Sound);
+    assets.on("complete", init, this);
+    assets.loadManifest([
+        { id: "pinkButton", src: "assets/images.pinkButton.png" },
+        { id: "clicked", src: "assets/audio.Clicked.wav" }
+    ]);
+}
 
 function init(){
     stage = new createjs.Stage(canvas);
@@ -28,15 +40,42 @@ function gameLoop()
     stage.update();
 }
 
-//Our main function
-function main()
+function pinkButtonClicked(event: createjs.MouseEvent)
 {
+    createjs.Sound.play("clicked");
+}
+
+function pinkButtonOver()
+{
+    pinkButton.alpha = 0.8;
+}
+
+function pinkButtonOut()
+{
+    pinkButton.alpha = 1.0;
+}
+
+
+//Our main function
+function main() {
     console.log("Game is Running");
     helloLabel = new createjs.Text("hello World!", "40px Consolas", "#00000");
 
     helloLabel.regX = helloLabel.getMeasuredWidth() * 0.5;
     helloLabel.regY = helloLabel.getMeasuredHeight() * 0.5;
     helloLabel.x = 160;
+    helloLabel.y = 180;
 
     stage.addChild(helloLabel);
+
+    pinkButton = new createjs.Bitmap(assets.getResult("pinkButton"));
+    pinkButton.regX = pinkButton.getBounds().width * 0.5;
+    pinkButton.regY = pinkButton.getBounds().height * 0.5;
+    pinkButton.x = 160;
+    pinkButton.y = 270;
+
+    stage.addChild(pinkButton);
+    pinkButton.on("click", pinkButtonClicked);
+    pinkButton.on("mouseover", pinkButtonOver);
+    pinkButton.on("mouseout", pinkButtonOut);
 }
