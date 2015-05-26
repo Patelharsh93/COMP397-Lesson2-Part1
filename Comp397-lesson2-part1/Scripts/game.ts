@@ -19,8 +19,8 @@ function preload()
     assets.installPlugin(createjs.Sound);
     assets.on("complete", init, this);
     assets.loadManifest([
-        { id: "pinkButton", src: "assets/images.pinkButton.png" },
-        { id: "clicked", src: "assets/audio.Clicked.wav" }
+        { id: "pinkButton", src: "assets/images/pinkButton.png" },
+        { id: "clicked", src: "assets/audio/Clicked.wav" }
     ]);
 }
 
